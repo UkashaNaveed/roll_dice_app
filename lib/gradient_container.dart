@@ -45,11 +45,23 @@ class _GradientContainerState extends State<GradientContainer> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/images/dice-$currentDiceRoll.png',
-                width: 200,
+              // Added AnimatedSwitcher for a simple rotation effect
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return RotationTransition(
+                    turns: animation,
+                    child: FadeTransition(opacity: animation, child: child),
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/dice-$currentDiceRoll.png',
+                  // ValueKey is required for AnimatedSwitcher to detect the change
+                  key: ValueKey(currentDiceRoll),
+                  width: 200,
+                ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: rollDice,
                 style: ElevatedButton.styleFrom(
@@ -57,7 +69,7 @@ class _GradientContainerState extends State<GradientContainer> {
                   backgroundColor: Colors.purple,
                   textStyle: const TextStyle(fontSize: 20),
                 ),
-                child: Text('Roll Dice'),
+                child: const Text('Roll Dice'),
               ),
             ],
           ),
